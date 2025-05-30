@@ -1,4 +1,4 @@
-import { ContentBlock, TextBlock, TitleBlock, SliderBlock, ButtonBlock, generateBlockId } from '../types';
+import { ContentBlock, TextBlock, TitleBlock, SliderBlock, ButtonBlock, generateBlockId } from '../../types';
 
 export const ensureContentBlocks = (content: any): ContentBlock[] => {
   if (Array.isArray(content)) {
