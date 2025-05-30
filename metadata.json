@@ -1,0 +1,6 @@
+{
+  "name": "Simple React Blog",
+  "description": "A simple blog application built with React, TypeScript, and Tailwind CSS, featuring public post viewing, category pages, and an admin area for post management.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
