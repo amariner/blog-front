@@ -1,81 +1,64 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Post } from '../types';
 
-const supabaseUrl = 'YOUR_SUPABASE_URL';
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables');
+}
 
-export async function getPosts(): Promise<Post[]> {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export const getPosts = async () => {
   const { data, error } = await supabase
     .from('posts')
     .select('*')
-    .order('date', { ascending: false });
+    .order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  return data;
+};
 
-  if (error) {
-    console.error('Error fetching posts:', error);
-    throw error;
-  }
-
-  return data || [];
-}
-
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export const getPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('posts')
     .select('*')
     .eq('slug', slug)
     .single();
-
-  if (error) {
-    console.error('Error fetching post:', error);
-    return null;
-  }
-
+  
+  if (error) throw error;
   return data;
-}
+};
 
-export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
+export const createPost = async (post: any) => {
   const { data, error } = await supabase
     .from('posts')
     .insert([post])
     .select()
     .single();
-
-  if (error) {
-    console.error('Error creating post:', error);
-    throw error;
-  }
-
+  
+  if (error) throw error;
   return data;
-}
+};
 
-export async function updatePost(post: Post): Promise<Post> {
+export const updatePost = async (post: any) => {
   const { data, error } = await supabase
     .from('posts')
     .update(post)
     .eq('id', post.id)
     .select()
     .single();
-
-  if (error) {
-    console.error('Error updating post:', error);
-    throw error;
-  }
-
+  
+  if (error) throw error;
   return data;
-}
+};
 
-export async function importPosts(posts: Partial<Post>[]): Promise<void> {
-  const { error } = await supabase
+export const importPosts = async (posts: any[]) => {
+  const { data, error } = await supabase
     .from('posts')
-    .upsert(posts, {
-      onConflict: 'id',
-      ignoreDuplicates: false
-    });
-
-  if (error) {
-    console.error('Error importing posts:', error);
-    throw error;
-  }
-}
+    .upsert(posts)
+    .select();
+  
+  if (error) throw error;
+  return data;
+};
