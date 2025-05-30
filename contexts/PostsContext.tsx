@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode, useCallback } from 'react';
 import { Post, PostCategory, ContentBlock, generateBlockId, TextBlock } from '../types';
-import { supabase, getPosts, getPostBySlug as getPostBySlugFromDb, createPost as createPostInDb, updatePost as updatePostInDb, importPosts } from '../lib/supabase';
+import { supabase, getPosts, getPostBySlug as getPostBySlugFromDb, createPost as createPostInDb, updatePost as updatePostInDb, importPosts } from '../src/lib/supabase';
 import { ensureContentBlocks } from '../utils/contentHelpers';
 
 interface PostsContextType {
